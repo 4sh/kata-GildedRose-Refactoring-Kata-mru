@@ -5,3 +5,9 @@ open class Item(var name: String, var sellIn: Int, var quality: Int) {
         return this.name + ", " + this.sellIn + ", " + this.quality
     }
 }
+
+class BackstageItem(sellIn: Int, quality: Int) : Item(BACKSTAGE, sellIn, quality)
+
+class SulfurasItem(sellIn: Int, quality: Int) : Item(SULFURAS, sellIn, quality)
+
+class BrieItem(sellIn: Int, quality: Int) : Item(BRIE, sellIn, quality)

@@ -1,46 +1,44 @@
 package com.gildedrose
 
-private const val BACKSTAGE = "Backstage passes to a TAFKAL80ETC concert"
-private const val SULFURAS = "Sulfuras, Hand of Ragnaros"
-private const val BRIE = "Aged Brie"
+const val BACKSTAGE = "Backstage passes to a TAFKAL80ETC concert"
+const val SULFURAS = "Sulfuras, Hand of Ragnaros"
+const val BRIE = "Aged Brie"
 
 class GildedRose(var items: List<Item>) {
 
     fun updateQuality() {
         items.forEach { item ->
+
+
             if (item.name != SULFURAS) {
                 if (item.name in listOf(BRIE, BACKSTAGE)) {
                     if (item.quality < 50) {
-                        item.quality += 1
+                        item.addQuality(1)
 
                         if (item.name == BACKSTAGE) {
                             if (item.sellIn < 11) {
-                                addQuality(item, 1)
+                                item.addQuality(1)
                             }
 
                             if (item.sellIn < 6) {
-                                addQuality(item, 1)
+                                item.addQuality(1)
                             }
                         }
                     }
                 } else {
-                    if (item.quality > 0) {
-                        item.quality -= 1
-                    }
+                    item.addQuality(-1)
                 }
                 item.sellIn -= 1
 
 
                 if (item.sellIn < 0) {
                     if (item.name == BRIE) {
-                        addQuality(item, 1)
+                        item.addQuality(1)
                     } else {
                         if (item.name != BACKSTAGE) {
-                            if (item.quality > 0) {
-                                item.quality -= 1
-                            }
+                            item.addQuality(-1)
                         } else {
-                            item.quality -= item.quality
+                            item.addQuality(-item.quality)
                         }
                     }
                 }
@@ -48,11 +46,9 @@ class GildedRose(var items: List<Item>) {
         }
     }
 
-    private fun addQuality(item: Item, value: Int) {
-        if (item.quality < 50) {
-            item.quality += value
-        }
+    private fun Item.addQuality(value: Int) {
+        quality += value
+        quality = quality.coerceIn(0, 50)
     }
-
 }
 
