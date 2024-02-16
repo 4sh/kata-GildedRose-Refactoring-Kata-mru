@@ -9,27 +9,21 @@ class GildedRose(var items: List<Item>) {
     fun updateQuality() {
         items.forEach { item ->
 
-
             if (item.name != SULFURAS) {
-                if (item.name in listOf(BRIE, BACKSTAGE)) {
-                    if (item.quality < 50) {
-                        item.addQuality(1)
-
-                        if (item.name == BACKSTAGE) {
-                            if (item.sellIn < 11) {
-                                item.addQuality(1)
-                            }
-
-                            if (item.sellIn < 6) {
-                                item.addQuality(1)
-                            }
-                        }
+                when {
+                    item.name == BACKSTAGE && item.sellIn < 6 -> {
+                        item.addQuality(3)
                     }
-                } else {
-                    item.addQuality(-1)
-                }
-                item.sellIn -= 1
 
+                    item.name == BACKSTAGE && item.sellIn < 11 -> {
+                        item.addQuality(2)
+                    }
+
+                    item.name in listOf(BACKSTAGE, BRIE) -> item.addQuality(1)
+                    else -> item.addQuality(-1)
+                }
+
+                item.sellIn -= 1
 
                 if (item.sellIn < 0) {
                     if (item.name == BRIE) {
