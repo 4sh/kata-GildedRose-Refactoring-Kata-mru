@@ -14,41 +14,41 @@ class GildedRose(var items: List<Item>) {
 
                 }
                 else -> {
-                    updateQualityBeforeSellIn(item)
-
                     item.sellIn -= 1
-
-                    updateQualityAfterSellIn(item)
+                    updateQuality(item)
                 }
             }
         }
     }
 
-    private fun updateQualityBeforeSellIn(item: Item) {
+    private fun updateQuality(item: Item) {
         when (item.name) {
             BACKSTAGE -> {
-                if (item.sellIn < 6) {
-                    item.addQuality(3)
-                } else if (item.sellIn < 11) {
-                    item.addQuality(2)
-                } else {
+                when {
+                    item.sellIn < 0 -> {
+                        item.addQuality(-item.quality)
+                    }
+                    item.sellIn < 5 -> {
+                        item.addQuality(3)
+                    }
+                    item.sellIn < 10 -> {
+                        item.addQuality(2)
+                    }
+                    else -> {
+                        item.addQuality(1)
+                    }
+                }
+            }
+            BRIE -> {
+                item.addQuality(1)
+                if (item.sellIn < 0) {
                     item.addQuality(1)
                 }
             }
-            BRIE -> item.addQuality(1)
-            else -> item.addQuality(-1)
-        }
-    }
-
-    private fun updateQualityAfterSellIn(item: Item) {
-        if (item.sellIn < 0) {
-            if (item.name == BRIE) {
-                item.addQuality(1)
-            } else {
-                if (item.name != BACKSTAGE) {
+            else -> {
+                item.addQuality(-1)
+                if (item.sellIn < 0) {
                     item.addQuality(-1)
-                } else {
-                    item.addQuality(-item.quality)
                 }
             }
         }
