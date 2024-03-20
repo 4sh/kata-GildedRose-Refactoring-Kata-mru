@@ -13,46 +13,40 @@ class GildedRose(var items: List<Item>) {
                 SULFURAS -> {
 
                 }
+
                 else -> {
                     item.sellIn -= 1
-                    updateQuality(item)
+                    item.addQuality(computeQuality(item))
                 }
             }
         }
     }
 
-    private fun updateQuality(item: Item) {
+    private fun computeQuality(item: Item): Int =
         when (item.name) {
-            BACKSTAGE -> {
-                when {
-                    item.sellIn < 0 -> {
-                        item.addQuality(-item.quality)
-                    }
-                    item.sellIn < 5 -> {
-                        item.addQuality(3)
-                    }
-                    item.sellIn < 10 -> {
-                        item.addQuality(2)
-                    }
-                    else -> {
-                        item.addQuality(1)
-                    }
-                }
+            BACKSTAGE -> when {
+                item.sellIn < 0 -> -item.quality
+                item.sellIn < 5 -> 3
+                item.sellIn < 10 -> 2
+                else -> 1
             }
+
             BRIE -> {
-                item.addQuality(1)
                 if (item.sellIn < 0) {
-                    item.addQuality(1)
+                    2
+                } else {
+                    1
                 }
             }
+
             else -> {
-                item.addQuality(-1)
                 if (item.sellIn < 0) {
-                    item.addQuality(-1)
+                    -2
+                } else {
+                    -1
                 }
             }
         }
-    }
 
     private fun Item.addQuality(value: Int) {
         quality += value
